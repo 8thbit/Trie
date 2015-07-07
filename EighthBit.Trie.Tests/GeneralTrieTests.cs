@@ -6,12 +6,12 @@ using Xunit;
 
 namespace EighthBit.Trie.Tests
 {
-    public class NumericTrieTests
+    public class GeneralTrieTests
     {
         [Fact]
         public void Once()
         {
-            var trie = new NumericTrie<string, string>();
+            var trie = new Trie<string, string>();
             trie.Add("123", "hello");
 
             var get = trie.Values("123").Single();
@@ -21,9 +21,9 @@ namespace EighthBit.Trie.Tests
         [Fact]
         public void Twice()
         {
-            var trie = new NumericTrie<string, string>();
+            var trie = new Trie<string, string>();
             trie.Add("123", "hello");
-            trie.Add("123","bye");
+            trie.Add("123", "bye");
 
             var get = trie.Values("123");
             Assert.Equal("bye", get.First());
@@ -33,7 +33,7 @@ namespace EighthBit.Trie.Tests
         [Fact]
         public void TwiceOnNearTrieIncorrect()
         {
-            var trie = new NumericTrie<string, string>();
+            var trie = new Trie<string, string>();
             trie.Add("1233", "hello");
             trie.Add("123", "bye");
 
@@ -44,7 +44,7 @@ namespace EighthBit.Trie.Tests
         [Fact]
         public void TwiceOnNearTrieCorrect()
         {
-            var trie = new NumericTrie<string, string>();
+            var trie = new Trie<string, string>();
             trie.Add("1233", "hello");
             trie.Add("123", "bye");
 
@@ -55,18 +55,18 @@ namespace EighthBit.Trie.Tests
         [Fact]
         public void TwiceOnTrieCorrect()
         {
-            var trie = new NumericTrie<string, string>();
+            var trie = new Trie<string, string>();
             trie.Add("123", "hello");
             trie.Add("123", "bye");
 
             var get = trie.Values("1234");
-            Assert.Equal(new[]{"bye","hello"}, get.ToArray());
+            Assert.Equal(new[] { "bye", "hello" }, get.ToArray());
         }
 
         [Fact]
         public void TrieOnce()
         {
-            var trie = new NumericTrie<string, string>();
+            var trie = new Trie<string, string>();
             trie.Add("123", "hello");
 
             var get = trie.Values("123").Single();
@@ -85,7 +85,7 @@ namespace EighthBit.Trie.Tests
         [Fact]
         public void NoKey()
         {
-            var trie = new NumericTrie<string, string>();
+            var trie = new Trie<string, string>();
             trie.Add("123", "hello");
 
             var get = trie.Values("43").SingleOrDefault();
@@ -95,7 +95,7 @@ namespace EighthBit.Trie.Tests
         [Fact]
         public void EmptyTrie()
         {
-            var trie = new NumericTrie<string, string>();
+            var trie = new Trie<string, string>();
 
             var get = trie.Values("43").SingleOrDefault();
             Assert.Null(get);
@@ -104,22 +104,22 @@ namespace EighthBit.Trie.Tests
         [Fact]
         public void SaveTrie()
         {
-            var trie=new NumericTrie<string,FakeData>();
-            trie.Add("123",new FakeData{Id=1,Name="123", Description="D 123"});
+            var trie = new Trie<string, FakeData>();
+            trie.Add("123", new FakeData { Id = 1, Name = "123", Description = "D 123" });
             trie.Add("1234", new FakeData { Id = 2, Name = "1234", Description = "D 1234" });
             trie.Add("45", new FakeData { Id = 3, Name = "45", Description = "D 45" });
 
-            var origSave=new MemoryStream();
+            var origSave = new MemoryStream();
             trie.Save(origSave);
             origSave.Position = 0;
 
-            var reload=new NumericTrie<string,FakeData>();
+            var reload = new Trie<string, FakeData>();
             reload.Load(origSave);
 
-            var reloadSave=new MemoryStream();
+            var reloadSave = new MemoryStream();
             reload.Save(reloadSave);
 
-            Assert.Equal(origSave.ToArray(),reloadSave.ToArray());
+            Assert.Equal(origSave.ToArray(), reloadSave.ToArray());
         }
     }
 }

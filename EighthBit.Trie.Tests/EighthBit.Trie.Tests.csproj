@@ -53,6 +53,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GeneralTrieTests.cs" />
     <Compile Include="NumericIndexTests.cs" />
     <Compile Include="NumericTrieTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

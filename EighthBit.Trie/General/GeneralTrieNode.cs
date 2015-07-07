@@ -31,7 +31,8 @@ namespace EighthBit.Collection.General
             if (level < index.Length)
             {
                 var pos = index[level];
-                var node = _children[pos];
+                ITrieNode<TK, TV, TI> node;
+                _children.TryGetValue(pos, out node);
                 return node == null ? this : node.Get(index, level + 1);
             }
             return this;

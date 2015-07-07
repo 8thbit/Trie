@@ -6,6 +6,8 @@ namespace EighthBit.Collection
 {
     public class CustomTrie<TK,TV,TI> : ITrie<TK, TV>
     {
+        private static readonly TV[] Empty = {};
+
         private readonly TrieSettings<TK, TV, TI> _settings; 
         private ITrieNode<TK, TV,TI> _root;
  
@@ -32,13 +34,14 @@ namespace EighthBit.Collection
         public IEnumerable<TV> Values(TK key)
         {
             var trie= Get(key);
-            return trie == _root ? null : trie.Values();
+
+            return trie == null || trie == _root ? Empty : trie.Values();
         }
 
         public IEnumerable<TV> ExactValues(TK key)
         {
             var trie = Get(key);
-            return trie == _root ? null : trie.Pairs().Where(p => p.Key.Equals(key)).Select(p => p.Value);
+            return trie == null || trie == _root ? Empty : trie.Pairs().Where(p => p.Key.Equals(key)).Select(p => p.Value);
         }
 
 
