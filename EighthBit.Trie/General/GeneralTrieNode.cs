@@ -1,13 +1,11 @@
-﻿using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 
 namespace EighthBit.Collection.General
 {
     public abstract class GeneralNode<TK, TV, TI> : ITrieNode<TK, TV, TI>
     {
-        private readonly ConcurrentDictionary<TI, ITrieNode<TK, TV, TI>> _children =
-            new ConcurrentDictionary<TI, ITrieNode<TK, TV, TI>>();
+        private readonly Dictionary<TI, ITrieNode<TK, TV, TI>> _children =
+            new Dictionary<TI, ITrieNode<TK, TV, TI>>();
 
         private readonly TrieSettings<TK, TV, TI> _settings;
 
@@ -16,10 +14,15 @@ namespace EighthBit.Collection.General
             if (level < index.Length)
             {
                 var pos = index[level];
-                if (!_children.ContainsKey(pos))
-                    _children.TryAdd(pos, _settings.TrieBuilder());
 
-                var node = _children[pos];
+                ITrieNode<TK, TV, TI> node;
+
+                if (!_children.TryGetValue(pos, out node))
+                {
+                    node = _settings.TrieBuilder();
+                    _children.Add(pos, node);
+                }
+
                 return node.Add(key, value, index, level + 1);
             }
 
@@ -45,7 +48,7 @@ namespace EighthBit.Collection.General
 
         void ITrieNode.AppendChild(object key, ITrieNode child)
         {
-            _children.TryAdd((TI)key, (ITrieNode<TK, TV, TI>)child);
+            _children.Add((TI)key, (ITrieNode<TK, TV, TI>)child);
         }
 
         void ITrieNode.AppendValue(object key, object value)

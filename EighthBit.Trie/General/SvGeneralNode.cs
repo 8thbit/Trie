@@ -5,11 +5,12 @@ namespace EighthBit.Collection.General
 {
     public sealed class SvGeneralNode<TK, TV,TI> : GeneralNode<TK, TV,TI>
     {
-        private readonly ConcurrentDictionary<TK, TV> _values = new ConcurrentDictionary<TK, TV>();
+        private readonly Dictionary<TK, TV> _values = new Dictionary<TK, TV>();
 
         protected override bool AddValue(TK key, TV value)
         {
-            return _values.TryAdd(key, value);
+            _values.Add(key, value);
+            return true;
         }
 
         public override IEnumerable<KeyValuePair<TK, TV>> Pairs()
